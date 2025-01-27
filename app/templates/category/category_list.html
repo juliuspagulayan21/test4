@@ -2,10 +2,11 @@
 {% block content %}
     <h2>Category List</h2>
 
-    <!-- Show link only if the user is an admin -->
-    {% if request.user.is_staff %}
-        <center><a href="{% url 'category_create' %}" class="create-category-link">Create New Category</a></center>
-    {% endif %}
+         {% if user.is_authenticated %}
+            {% if user.role == 'LGU Member' %}
+               <center><a href="{% url 'category_create' %}" class="create-category-link">Create New Category</a></center>
+            {% endif %}
+        {% endif %}
 
     <div class="category-gallery">
         {% for category in categories %}

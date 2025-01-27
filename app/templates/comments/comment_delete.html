@@ -3,9 +3,9 @@
 {% block content %}
     <div class="delete-confirmation">
         <h2>Are you sure you want to delete {{ comment.user.username }} - {{ comment.content }}?</h2>
-        <form method="post">
+        <form action="{% url 'comment_delete' comment.pk  %}"method="post">
             {% csrf_token %}
-            <button type="submit" class="delete-button">Yes, delete</button>
+                <button type="submit" class="confirm-delete-button">Confirm Delete</button>
             <a href="{% url 'post_list' %}" class="cancel-link">Cancel</a>
         </form>
     </div>

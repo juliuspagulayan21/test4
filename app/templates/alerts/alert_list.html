@@ -4,11 +4,10 @@
     <div class="alert-list-container">
         <h2 class="alert-list-title">Alert List</h2>
 
-        <!-- Show link only if the user is an admin -->
-        {% if request.user.is_staff %}
-            <center>
-                <a href="{% url 'alert_create' %}" class="alert-create-link">Create New Alert</a>
-            </center>
+        {% if user.is_authenticated %}
+            {% if user.role == 'LGU Member' %}
+               <a href="{% url 'alert_create' %}" class="alert-create-link">Create New Alert</a>
+            {% endif %}
         {% endif %}
 
         <ul class="alert-list">

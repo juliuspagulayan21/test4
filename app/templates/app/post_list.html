@@ -5,9 +5,12 @@
     <h2>Post List</h2>
     <div class="post-list-container">
 
-        {% if user.is_authenticated and user.is_staff %}
-            <center><a href="{% url 'post_create' %}" class="create-post-link">Create New Post</a></center>
-        {% endif %}
+
+     {% if user.is_authenticated %}
+         {% if user.role == 'LGU Member' %}
+               <center><a href="{% url 'post_create' %}" class="create-post-link">Create New Post</a></center>
+          {% endif %}
+     {% endif %}
 
         <ul class="post-list">
             {% for post in posts %}

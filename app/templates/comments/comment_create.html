@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <div class="comment-form-container">
-    <form method="post" class="form-comment">
+    <form action="{% url 'comment_create' post.pk %}" method="post" class="form-comment">
         {% csrf_token %}
         <h2 class="form-heading">Write a Comment</h2>
 

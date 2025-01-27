@@ -1,0 +1,26 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="profile-container">
+        <h2 class="profile-heading">Profile Details</h2>
+        <div class="profile-info">
+            <img
+                {% if user.image %}
+                    src="{{ user.image.url }}"
+                {% else %}
+                    src="{% static 'images/default_profile.jpg' %}"
+                {% endif %}
+                alt="Profile Picture"
+                class="profile-image"
+            >
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Age:</strong> {{ user.age }}</p>
+            <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
+            <p><strong>Role:</strong> {{ user.role }}</p>
+            <p><strong>Address:</strong> {{ user.address }}</p>
+        </div>
+    </div>
+
+{% endblock %}

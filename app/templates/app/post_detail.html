@@ -2,10 +2,13 @@
 
 {% block content %}
   <div class="post-detail-actions">
-    {% if user.is_staff %}
-      <a href="{% url 'post_update' post.pk %}" class="update-post-link">Update Post</a>
-      <a href="{% url 'post_delete' post.pk %}" class="delete-post-link">Delete Post</a>
-    {% endif %}
+
+     {% if user.is_authenticated %}
+         {% if user.role == 'LGU Member' %}
+              <a href="{% url 'post_update' post.pk %}" class="update-post-link">Update Post</a>
+              <a href="{% url 'post_delete' post.pk %}" class="delete-post-link">Delete Post</a>
+          {% endif %}
+     {% endif %}
   </div>
 
   <div class="post-detail-container">

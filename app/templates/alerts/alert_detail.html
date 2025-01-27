@@ -15,11 +15,12 @@
             </div>
             <div class="right-column">
                 <div class="alert-detail-actions">
-                    <!-- Show 'Update' and 'Delete' only for admin users -->
-                    {% if request.user.is_staff %}
-                        <a href="{% url 'alert_update' alert.pk %}" class="alert-update-link">Update Alert</a>
-                        <a href="{% url 'alert_delete' alert.pk %}" class="alert-delete-link">Delete Alert</a>
-                    {% endif %}
+                         {% if user.is_authenticated %}
+                            {% if user.role == 'LGU Member' %}
+                             <a href="{% url 'alert_update' alert.pk %}" class="alert-update-link">Update Alert</a>
+                             <a href="{% url 'alert_delete' alert.pk %}" class="alert-delete-link">Delete Alert</a>
+                            {% endif %}
+                         {% endif %}
                     <a href="{% url 'alert_list' %}" class="alert-back-link">Back to Alerts</a>
                 </div>
                 <div class="alert-detail-info">

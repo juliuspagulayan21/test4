@@ -39,11 +39,15 @@ class CategoryDetailView(DetailView):
 # CATEGORY VIEWS
 class CategoryCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Category
-    fields = ['category_image','name', 'description']
+    fields = ['category_image', 'name', 'description']
     template_name = 'category/category_create.html'
 
     def test_func(self):
-        return self.request.user.is_staff
+        # Only LGU Members can create categories
+        if self.request.user.role == 'LGU Member':
+            return True
+        raise Http404("You are not authorized to create a category.")
+
 
 class CategoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Category
@@ -51,7 +55,11 @@ class CategoryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'category/category_update.html'
 
     def test_func(self):
-        return self.request.user.is_staff
+        # Only LGU Members can update categories
+        if self.request.user.role == 'LGU Member':
+            return True
+        raise Http404("You are not authorized to update this category.")
+
 
 class CategoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Category
@@ -59,7 +67,11 @@ class CategoryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('category_list')
 
     def test_func(self):
-        return self.request.user.is_staff
+        # Only LGU Members can delete categories
+        if self.request.user.role == 'LGU Member':
+            return True
+        raise Http404("You are not authorized to delete this category.")
+
 
 # POST VIEWS
 class PostListView(ListView):
@@ -83,15 +95,23 @@ class PostCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return super().form_valid(form)
 
     def test_func(self):
-        return self.request.user.is_staff
+        # Only LGU Members can create posts
+        if self.request.user.role == 'LGU Member':
+            return True
+        raise Http404("You are not authorized to create a post.")
+
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'post_image','content', 'category']
+    fields = ['title', 'post_image', 'content', 'category']
     template_name = 'app/post_update.html'
 
     def test_func(self):
-        return self.request.user.is_staff
+        # Only LGU Members can update posts
+        if self.request.user.role == 'LGU Member':
+            return True
+        raise Http404("You are not authorized to update this post.")
+
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
@@ -99,7 +119,12 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('post_list')
 
     def test_func(self):
-        return self.request.user.is_staff
+        # Only LGU Members can delete posts
+        if self.request.user.role == 'LGU Member':
+            return True
+        raise Http404("You are not authorized to delete this post.")
+
+
 
 # COMMENT VIEWS
 class CommentListView(ListView):
@@ -132,8 +157,6 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
         return context
 
 
-
-
 class CommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
     fields = ['content']
@@ -141,18 +164,17 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Get the related post to the comment being updated
-        context['post'] = self.object.post  # Ensure post is linked to the comment
+        context['post'] = self.object.post
         return context
 
     def get_success_url(self):
-        # Redirect to the post detail view after successful comment update
         return reverse_lazy('post_detail', kwargs={'pk': self.object.post.pk})
 
     def dispatch(self, request, *args, **kwargs):
         comment = self.get_object()
-        if comment.author != request.user:
+        if request.user.role != 'LGU Member' and comment.author != request.user:
             raise Http404("You are not authorized to edit this comment.")
+
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -180,10 +202,9 @@ class AlertDetailView(DetailView):
     template_name = 'alerts/alert_detail.html'
     context_object_name = 'alert'
 
-# ALERT VIEWS
 class AlertCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Alert
-    fields = ['title', 'alert_image','message', 'valid_until']
+    fields = ['title', 'alert_image', 'message', 'valid_until']
     template_name = 'alerts/alert_create.html'
 
     def form_valid(self, form):
@@ -191,7 +212,10 @@ class AlertCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return super().form_valid(form)
 
     def test_func(self):
-        return self.request.user.is_staff
+        if self.request.user.role == 'LGU Member':
+            return True
+        raise Http404("You are not authorized to create an alert.")
+
 
 class AlertUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Alert
@@ -199,7 +223,10 @@ class AlertUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'alerts/alert_update.html'
 
     def test_func(self):
-        return self.request.user.is_staff
+        if self.request.user.role == 'LGU Member':
+            return True
+        raise Http404("You are not authorized to update this alert.")
+
 
 class AlertDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Alert
@@ -207,8 +234,9 @@ class AlertDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('alert_list')
 
     def test_func(self):
-        return self.request.user.is_staff
-
+        if self.request.user.role == 'LGU Member':
+            return True
+        raise Http404("You are not authorized to delete this alert.")
 
 
 
