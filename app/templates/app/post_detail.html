@@ -1,0 +1,60 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+  <div class="post-detail-actions">
+    {% if user.is_staff %}
+      <a href="{% url 'post_update' post.pk %}" class="update-post-link">Update Post</a>
+      <a href="{% url 'post_delete' post.pk %}" class="delete-post-link">Delete Post</a>
+    {% endif %}
+  </div>
+
+  <div class="post-detail-container">
+    <div class="post-left-column">
+      {% if post.post_image %}
+        <img src="{{ post.post_image.url }}" alt="{{ post.title }} Image" class="post-img">
+      {% else %}
+        <p>No image available</p>
+      {% endif %}
+        <div class="post-details">
+        <h2 class="post-title">{{ post.title }}</h2>
+        <p class="post-author"><strong>Author:</strong> {{ post.author.username }}</p>
+        <p class="post-date"><strong>Created At:</strong> {{ post.created_at }}</p>
+        <p class="post-content">{{ post.content }}</p>
+        </div>
+    </div>
+    <div class="post-right-column">
+
+
+    <div class="comments-section">
+          <h3 class="comments-title">Comments</h3>
+          <a href="{% url 'comment_create' post.pk %}" class="add-comment-link">Add a Comment</a>
+          <div class="comments-container">
+            <ul class="comments-list">
+              {% for comment in post.comments.all %}
+                <li class="comment-item">
+                  <div class="comment-header">
+                    <strong class="comment-author">{{ comment.author.username }}</strong>
+                    <span class="comment-date">• {{ comment.created_at }}</span>
+                  </div>
+                  <p class="comment-content">
+                      {% if comment.content|length > 100 %}
+                        {{ comment.content|slice:":50" }}...
+                        <a href="{% url 'comment_detail' comment.pk %}" class="see-more-link">See More</a>
+                      {% else %}
+                        {{ comment.content }}
+                      {% endif %}
+                    </p>
+                  <div class="comment-actions">
+                    {% if comment.author == user %}
+                      <a href="{% url 'comment_update' comment.pk %}" class="edit-comment-link">Edit</a>
+                      <a href="{% url 'comment_delete' comment.pk %}" class="delete-comment-link">Delete</a>
+                    {% endif %}
+                  </div>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+    </div>
+  </div>
+{% endblock content %}

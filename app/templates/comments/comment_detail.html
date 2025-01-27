@@ -1,0 +1,10 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+<div class="comment-detail-container">
+    <h2>Comment by {{ comment.author.username }}</h2>
+    <p><strong>Posted on:</strong> {{ comment.created_at }}</p>
+    <p><strong>Content:</strong> {{ comment.content }}</p>
+    <a href="{% url 'post_detail' comment.post.pk %}" class="back-to-post-link">Back to Post</a>
+</div>
+{% endblock content %}

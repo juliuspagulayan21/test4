@@ -1,0 +1,39 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+<div class="create-alert-container">
+    <h2 class="create-alert-title">Create a New Alert</h2>
+    <form action="{% url 'alert_create' %}" method="post" enctype="multipart/form-data" class="post-form">
+        {% csrf_token %}
+
+        <!-- Title Field -->
+        <div class="form-group">
+            <label for="title" class="form-label">Title:</label>
+            <input type="text" id="title" name="title" placeholder="Enter alert title" class="form-input" value="{{ form.title.value }}" required>
+        </div>
+
+        <!-- Message Field -->
+        <div class="form-group">
+            <label for="message" class="form-label">Message:</label>
+            <textarea id="message" name="message" placeholder="Enter alert message" class="form-input" rows="5" required>{{ form.message.value }}</textarea>
+        </div>
+
+        <!-- Valid Until Field -->
+        <div class="form-group">
+            <label for="valid_until" class="form-label">Valid Until:</label>
+            <input type="datetime-local" id="valid_until" name="valid_until" class="form-input" value="{{ form.valid_until.value }}" required>
+        </div>
+
+        <!-- Alert Image Field -->
+        <div class="form-group">
+            <label for="alert_image" class="form-label">Image:</label>
+            <input type="file" id="alert_image" name="alert_image" class="form-input">
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="create-alert-button">Create Alert</button>
+    </form>
+
+    <a href="{% url 'alert_list' %}" class="back-to-alerts-link">Back to Alerts</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+<div class="comment-form-container">
+    <form method="post" class="form-comment">
+        {% csrf_token %}
+        <h2 class="form-heading">Write a Comment</h2>
+
+        <div class="form-group">
+            <label for="content" class="form-label">Content</label>
+            <textarea id="content" name="content" class="form-input" placeholder="Write your comment here" required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Post Comment</button>
+    </form>
+
+    <div class="back-link-container">
+        <a href="{% url 'post_detail' post.pk %}" class="back-to-post-link">Back to Post</a>
+    </div>
+</div>
+{% endblock content %}

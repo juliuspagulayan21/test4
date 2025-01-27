@@ -1,0 +1,32 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="category-detail">
+        <h2>{{ category.name }}</h2>
+        <p class="category-description">{{ category.description }}</p>
+
+        <h3>Posts under this Category:</h3>
+        <ul class="posts-list">
+            {% for post in posts %}
+                <li>
+                    <!-- Displaying the post image if available -->
+                    {% if post.post_image %}
+                        <img src="{{ post.post_image.url }}" alt="{{ post.title }}" class="post-image">
+                    {% endif %}
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </li>
+            {% empty %}
+                <li class="empty-state">No posts available in this category yet.</li>
+            {% endfor %}
+        </ul>
+
+        <div class="action-buttons">
+            <!-- Show 'Edit' and 'Delete' only for admin users -->
+            {% if request.user.is_staff %}
+                <a href="{% url 'category_update' category.pk %}">Edit</a>
+                <a href="{% url 'category_delete' category.pk %}">Delete</a>
+            {% endif %}
+            <a href="{% url 'category_list' %}">Back to Categories</a>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,12 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+    <div class="delete-confirmation">
+        <h2>Are you sure you want to delete {{ comment.user.username }} - {{ comment.content }}?</h2>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="delete-button">Yes, delete</button>
+            <a href="{% url 'post_list' %}" class="cancel-link">Cancel</a>
+        </form>
+    </div>
+{% endblock content %}

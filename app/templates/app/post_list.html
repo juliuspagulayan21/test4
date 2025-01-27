@@ -1,0 +1,41 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+    <h2>Post List</h2>
+    <div class="post-list-container">
+
+        {% if user.is_authenticated and user.is_staff %}
+            <center><a href="{% url 'post_create' %}" class="create-post-link">Create New Post</a></center>
+        {% endif %}
+
+        <ul class="post-list">
+            {% for post in posts %}
+                <li class="post-item">
+                    <div class="image-detail">
+                        {% if post.post_image %}
+                            <a href="{% url 'post_detail' post.pk %}">
+                                <img src="{{ post.post_image.url }}" alt="Post Image" class="item-image">
+                            </a>
+                        {% else %}
+                            <p class="no-image-text">No image available</p>
+                        {% endif %}
+                    </div>
+                    <div class="post-detail">
+                        <a href="{{ post.get_absolute_url }}" class="post-link">{{ post.title }}</a>
+                        <p class="post-snippet">{{ post.content|truncatewords:20 }}</p>
+                        <p class="post-meta">
+                            <strong>Category:</strong>
+                            {% if post.category %}
+                                {{ post.category.name }}
+                            {% else %}
+                                No Category
+                            {% endif %}
+                        </p>
+                        <p class="post-meta"><strong>Created on:</strong> {{ post.created_at }}</p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}

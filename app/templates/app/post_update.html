@@ -1,0 +1,43 @@
+{% extends 'app/base.html' %}
+{% block content %}
+<div class="post-form-container">
+    <h2 class="post-form-title">Post</h2>
+    <form action="{% url 'post_update' post.pk %}" method="post" enctype="multipart/form-data" class="post-form">
+        {% csrf_token %}
+
+        <!-- Title Field -->
+        <div class="form-group">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" id="title" name="title" placeholder="Enter the post title" class="form-input" required>
+        </div>
+
+        <!-- Post Image Field -->
+        <div class="form-group">
+            <label for="post_image" class="form-label">Post Image</label>
+            <input type="file" id="post_image" name="post_image" class="form-input">
+        </div>
+
+        <!-- Content Field -->
+        <div class="form-group">
+            <label for="content" class="form-label">Content</label>
+            <textarea id="content" name="content" placeholder="Write your post content here" class="form-input" rows="6" required></textarea>
+        </div>
+
+        <!-- Category Field -->
+        <div class="form-group">
+            <label for="category" class="form-label">Category</label>
+            <select id="category" name="category" class="form-input">
+                <!-- Populate categories dynamically -->
+                {% for category in form.fields.category.queryset %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">Save</button>
+    </form>
+
+    <a href="{% url 'post_list' %}" class="back-link">Back to Posts</a>
+</div>
+{% endblock content %}
